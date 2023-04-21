@@ -11,9 +11,14 @@
 	<groupId>com.task</groupId>
 	<artifactId>PostMicroserviceSystem</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>PostMicroserviceSystem</name>
+    <packaging>pom</packaging>
+    <name>PostMicroserviceSystem</name>
 	<description>Kubernetes mentoring program</description>
-	<properties>
+    <modules>
+        <module>User-Service</module>
+		<module>Post-Service</module>
+	</modules>
+    <properties>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
@@ -43,6 +48,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<finalName>${project.artifactId}</finalName>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
