@@ -12,6 +12,6 @@ public interface UserService {
 
     void deleteById(Long id);
 
-    void incrementPosts(Long id);
-    void decrementPosts(Long id);
+    User incrementPosts(Long id);
+    User decrementPosts(Long id);
 }

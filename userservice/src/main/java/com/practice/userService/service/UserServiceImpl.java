@@ -35,21 +35,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void incrementPosts(Long id) {
+    public User incrementPosts(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             int count = Integer.parseInt(user.getAmountOfPosts());
             user.setAmountOfPosts(String.valueOf(count++));
-            userRepository.save(user);
+            return userRepository.save(user);
         } else {
             throw new NoSuchElementException("NO user found for the id: " + id);
         }
     }
 
     @Override
-    public void decrementPosts(Long id) {
+    public User decrementPosts(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (!optionalUser.isPresent()) {
@@ -59,6 +59,6 @@ public class UserServiceImpl implements UserService {
         User user = optionalUser.get();
         int count = Integer.parseInt(user.getAmountOfPosts());
         user.setAmountOfPosts(String.valueOf(count--));
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 }

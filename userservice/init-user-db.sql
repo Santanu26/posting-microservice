@@ -9,7 +9,7 @@ create table if not exists user (
     amount_of_posts varchar(255) not null
   );
 insert into user(username, amount, amount_of_posts)
-values ('test','100','1');
+values ('John Doe','100','1');
 insert into user(username, amount, amount_of_posts)
 values ('santanu','1000','0');
 

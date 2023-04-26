@@ -56,4 +56,14 @@ public class UserController {
         userService.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/users/increment-post/{id}")
+    public ResponseEntity <User> incrementPostCount(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.incrementPosts(id));
+    }
+
+    @PostMapping("/users/decrement-post/{id}")
+    public ResponseEntity <User> decrementPostCount(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.decrementPosts(id));
+    }
 }
