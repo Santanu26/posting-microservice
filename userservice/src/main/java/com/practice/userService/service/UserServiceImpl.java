@@ -1,6 +1,6 @@
 package com.practice.userService.service;
 
-import com.practice.userService.User;
+import com.practice.userService.model.User;
 import com.practice.userService.respository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;

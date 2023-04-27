@@ -1,6 +1,6 @@
 package com.practice.userService.controller;
 
-import com.practice.userService.User;
+import com.practice.userService.model.User;
 import com.practice.userService.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -58,12 +58,12 @@ public class UserController {
     }
 
     @PostMapping("/users/increment-post/{id}")
-    public ResponseEntity <User> incrementPostCount(@PathVariable Long id) {
+    public ResponseEntity<User> incrementPostCount(@PathVariable Long id) {
         return ResponseEntity.ok(userService.incrementPosts(id));
     }
 
     @PostMapping("/users/decrement-post/{id}")
-    public ResponseEntity <User> decrementPostCount(@PathVariable Long id) {
+    public ResponseEntity<User> decrementPostCount(@PathVariable Long id) {
         return ResponseEntity.ok(userService.decrementPosts(id));
     }
 }

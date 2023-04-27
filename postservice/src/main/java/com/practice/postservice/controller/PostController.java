@@ -1,6 +1,6 @@
 package com.practice.postservice.controller;
 
-import com.practice.postservice.Post;
+import com.practice.postservice.model.Post;
 import com.practice.postservice.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

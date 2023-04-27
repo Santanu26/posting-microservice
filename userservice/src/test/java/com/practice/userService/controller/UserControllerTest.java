@@ -1,6 +1,6 @@
 package com.practice.userService.controller;
 
-import com.practice.userService.User;
+import com.practice.userService.model.User;
 import com.practice.userService.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

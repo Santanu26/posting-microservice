@@ -1,4 +1,4 @@
-package com.practice.userService;
+package com.practice.userService.model;
 
 import jakarta.persistence.*;
 
@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -53,11 +53,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", amount='" + amount + '\'' +
-                ", amountOfPosts='" + amountOfPosts + '\'' +
-                '}';
+        return "User{" + "id=" + id + ", username='" + username + '\'' + ", amount='" + amount + '\'' + ", amountOfPosts='" + amountOfPosts + '\'' + '}';
     }
 }
