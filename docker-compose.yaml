@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  user_db:
+    image: mysql:8.0.33
+    container_name: mysqldb_user_db
+    environment:
+      MYSQL_DATABASE: user_db
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - user_db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+  post_db:
+    image: mysql:8.0.33
+    container_name: mysqldb_post_db
+    environment:
+      MYSQL_DATABASE: post_db
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - post_db_data:/var/lib/mysql
+    ports:
+      - "3308:3306"
+
+  user-service:
+    image: ${REGISTRY_USERNAME}/user-service:${SERVICE_VERSION}
+    environment:
+      DB_HOST: user_db
+      DB_PORT: 3306
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - user_db
+    ports:
+      - "9090:8080"
+
+  post-service:
+    image: ${REGISTRY_USERNAME}/post-service:${SERVICE_VERSION}
+    environment:
+      DB_HOST: post_db
+      DB_PORT: 3306
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      USER_SERVICE_URL: http://user-service:8080
+    depends_on:
+      - post_db
+      - user-service
+    ports:
+      - "9091:8081"
+
+volumes:
+  user_db_data:
+  post_db_data:
