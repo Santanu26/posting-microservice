@@ -9,8 +9,10 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_INITDB_SKIP_TZINFO: "yes"
     volumes:
       - user_db_data:/var/lib/mysql
+      - ./user_db_init:/docker-entrypoint-initdb.d
     ports:
       - "3307:3306"
 
@@ -22,8 +24,10 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_INITDB_SKIP_TZINFO: "yes"
     volumes:
       - post_db_data:/var/lib/mysql
+      - ./post_db_init:/docker-entrypoint-initdb.d
     ports:
       - "3308:3306"
 
@@ -46,7 +50,7 @@ services:
       DB_PORT: 3306
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-      USER_SERVICE_URL: http://user-service:8080
+      USER_SERVICE_URL: http://localhost:9090
     depends_on:
       - post_db
       - user-service

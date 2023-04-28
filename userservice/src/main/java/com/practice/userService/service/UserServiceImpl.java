@@ -29,36 +29,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public boolean deleteById(Long id) {
         userRepository.deleteById(id);
+        return true;
     }
 
     @Override
     @Transactional
-    public User incrementPosts(Long id) {
+    public User incrementPostCount(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
 
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            int count = Integer.parseInt(user.getAmountOfPosts());
-            user.setAmountOfPosts(String.valueOf(count++));
-            return userRepository.save(user);
-        } else {
-            throw new NoSuchElementException("NO user found for the id: " + id);
-        }
-    }
-
-    @Override
-    public User decrementPosts(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if (!optionalUser.isPresent()) {
-            throw new NoSuchElementException("NO user found for the id: " + id);
+        if (optionalUser.isEmpty()) {
+            throw new NoSuchElementException("User not found for the given id: " + id);
         }
 
         User user = optionalUser.get();
         int count = Integer.parseInt(user.getAmountOfPosts());
-        user.setAmountOfPosts(String.valueOf(count--));
+        user.setAmountOfPosts(String.valueOf(++count));
+        return userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public User decrementPostCount(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            throw new NoSuchElementException("User not found for the given id: " + id);
+        }
+
+        User user = optionalUser.get();
+        int count = Integer.parseInt(user.getAmountOfPosts());
+        user.setAmountOfPosts(String.valueOf(--count));
         return userRepository.save(user);
     }
 }

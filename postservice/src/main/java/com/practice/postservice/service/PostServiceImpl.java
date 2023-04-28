@@ -5,7 +5,11 @@ import com.practice.postservice.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
@@ -31,23 +35,44 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post save(Post post) {
         Post newPost = postRepository.save(post);
-        incrementNoOfPosts(newPost.getAuthorId());
+        incrementNoOfPostCount(newPost.getAuthorId());
         return newPost;
     }
 
     @Override
-    public void deleteById(Long id) {
+    public boolean deleteById(Long id) {
         postRepository.deleteById(id);
-        decrementNoOfPosts(id);
+        decrementNoOfPostCount(id);
+        return true;
     }
 
-    private void incrementNoOfPosts(Long authorId) {
-        String url = USER_SERVICE_URL + "/users/increment-post/" + authorId;
-        restTemplate.postForObject(url, HttpEntity.EMPTY, String.class);
+    private void incrementNoOfPostCount(Long authorId) {
+        if (USER_SERVICE_URL == null) {
+            throw new IllegalStateException("USER_SERVICE_URL not set");
+        }
+        String url = USER_SERVICE_URL + "/users/" + authorId + "/post-count/increment";
+        try {
+            ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.PUT, HttpEntity.EMPTY, Void.class);
+            if (response.getStatusCode() != HttpStatus.OK) {
+                throw new RuntimeException("Failed to increment post count");
+            }
+        } catch (RestClientException e) {
+            throw new RuntimeException("Failed to increment post count", e);
+        }
     }
 
-    private void decrementNoOfPosts(Long authorId) {
-        String url = USER_SERVICE_URL + "/users/decrement-post/" + authorId;
-        restTemplate.postForObject(url, HttpEntity.EMPTY, String.class);
+    private void decrementNoOfPostCount(Long authorId) {
+        if (USER_SERVICE_URL == null) {
+            throw new IllegalStateException("USER_SERVICE_URL not set");
+        }
+        String url = USER_SERVICE_URL + "/users/" + authorId + "/post-count/decrement";
+        try {
+            ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
+            if (response.getStatusCode() != HttpStatus.OK) {
+                throw new RuntimeException("Failed to decrement post count");
+            }
+        } catch (RestClientException e) {
+            throw new RuntimeException("Failed to decrement post count", e);
+        }
     }
 }

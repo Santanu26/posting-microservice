@@ -10,9 +10,9 @@ public interface UserService {
 
     User save(User user);
 
-    void deleteById(Long id);
+    boolean deleteById(Long id);
 
-    User incrementPosts(Long id);
+    User incrementPostCount(Long id);
 
-    User decrementPosts(Long id);
+    User decrementPostCount(Long id);
 }

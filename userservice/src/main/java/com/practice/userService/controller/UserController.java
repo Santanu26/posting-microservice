@@ -19,51 +19,52 @@ public class UserController {
 
 
     @GetMapping("/greeting")
-    public String greeting() {
-        return "Hello, k8s!";
+    public ResponseEntity<String> greeting() {
+        return ResponseEntity.ok("Hello, k8s!");
     }
 
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> user = userService.findById(id);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
-        } else {
+        if (!user.isPresent()) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(user.get());
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@Validated @RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody @Validated User user) {
         return ResponseEntity.ok(userService.save(user));
     }
 
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUserById(@PathVariable Long id, @Validated @RequestBody User updatedUser) {
         Optional<User> existingUser = userService.findById(id);
-
-        if (existingUser.isPresent()) {
-            User modifiedUser = existingUser.get();
-            modifiedUser.setUsername(updatedUser.getUsername());
-
-            return ResponseEntity.ok(userService.save(modifiedUser));
+        if (!existingUser.isPresent()) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        User modifiedUser = existingUser.get();
+        modifiedUser.setUsername(updatedUser.getUsername());
+
+        return ResponseEntity.ok(userService.save(modifiedUser));
     }
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
-        userService.deleteById(id);
+        boolean isDeleted = userService.deleteById(id);
+        if (!isDeleted) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/users/increment-post/{id}")
+    @PutMapping("/users/{id}/post-count/increment")
     public ResponseEntity<User> incrementPostCount(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.incrementPosts(id));
+        return ResponseEntity.ok(userService.incrementPostCount(id));
     }
 
-    @PostMapping("/users/decrement-post/{id}")
+    @PutMapping("/users/{id}/post-count/decrement")
     public ResponseEntity<User> decrementPostCount(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.decrementPosts(id));
+        return ResponseEntity.ok(userService.decrementPostCount(id));
     }
 }

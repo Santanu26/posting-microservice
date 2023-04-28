@@ -10,5 +10,5 @@ public interface PostService {
 
     Post save(Post post);
 
-    void deleteById(Long id);
+    boolean deleteById(Long id);
 }
