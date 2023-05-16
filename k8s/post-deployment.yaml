@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-deployment
+  namespace: k8s-program
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: post-api
+  template:
+    metadata:
+      labels:
+        app: post-api
+    spec:
+      containers:
+        - name: post-api
+          image: santanubarua/post-service:latest
+          ports:
+            - containerPort: 8081
+          env:
+            - name: DB_HOST
+              value: post-db
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_USERNAME
+              value: root
+            - name: DB_PASSWORD
+              value: qwerty
+            - name: USER_SERVICE_URL
+              value: "http://user-service:8080"

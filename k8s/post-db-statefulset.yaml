@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: post-db
+spec:
+  selector:
+    matchLabels:
+      app: post-db
+  serviceName: post-db-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: post-db
+    spec:
+      containers:
+        - name: post-db
+          image: mysql:8.0.33
+          env:
+            - name: MYSQL_DATABASE
+              value: post_db
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              value: qwerty
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: post-db-pvc
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: post-db-pvc
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
