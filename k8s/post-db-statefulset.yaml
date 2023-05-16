@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: post-db
+  namespace: k8s-program
 spec:
   selector:
     matchLabels:
