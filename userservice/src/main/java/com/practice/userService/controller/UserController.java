@@ -10,17 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/users/")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/greeting")
-    public ResponseEntity<String> greeting() {
-        return ResponseEntity.ok("Hello, k8s!");
-    }
-
-    @GetMapping("/users/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> user = userService.findById(id);
         if (!user.isPresent()) {
@@ -29,12 +25,12 @@ public class UserController {
         return ResponseEntity.ok(user.get());
     }
 
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<User> createUser(@RequestBody @Validated User user) {
         return ResponseEntity.ok(userService.save(user));
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<User> updateUserById(@PathVariable Long id, @Validated @RequestBody User updatedUser) {
         Optional<User> existingUser = userService.findById(id);
         if (!existingUser.isPresent()) {
@@ -46,7 +42,7 @@ public class UserController {
         return ResponseEntity.ok(userService.save(modifiedUser));
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
         boolean isDeleted = userService.deleteById(id);
         if (!isDeleted) {
@@ -55,12 +51,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/users/{id}/post-count/increment")
+    @PutMapping("{id}/post-count/increment")
     public ResponseEntity<User> incrementPostCount(@PathVariable Long id) {
         return ResponseEntity.ok(userService.incrementPostCount(id));
     }
 
-    @PutMapping("/users/{id}/post-count/decrement")
+    @PutMapping("{id}/post-count/decrement")
     public ResponseEntity<User> decrementPostCount(@PathVariable Long id) {
         return ResponseEntity.ok(userService.decrementPostCount(id));
     }
