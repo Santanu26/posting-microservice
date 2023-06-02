@@ -16,5 +16,5 @@ In the project root directory, run the following command to build a Docker image
    `docker network create user-network`
 
 2. Run the following command to run the user-service container:
-   `docker run -p 9090:8080 --name user-service --net user-network -e MYSQL_HOST=mysqldb -e MYSQL_USER=root -e MYSQL_PASSWORD=qwerty -e MYSQL_PORT=3306 user-service`
-3. Test the service by sending a GET request to http://localhost:9090/greeting:
+   `docker run -p 8080:8080 --name user-service --net user-network -e MYSQL_HOST=mysqldb -e MYSQL_USER=root -e MYSQL_PASSWORD=qwerty -e MYSQL_PORT=3306 user-service`
+3. Test the service by sending a GET request to http://localhost:8080/greeting:

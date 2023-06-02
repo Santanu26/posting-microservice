@@ -1,9 +1,11 @@
 package com.practice.postservice.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDate;
 
+@Data
 @Entity
 @Table(name = "post")
 public class Post {
@@ -16,36 +18,4 @@ public class Post {
     private String textOfPost;
     @Column(nullable = false)
     private LocalDate postedAt;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
-    }
-
-    public String getTextOfPost() {
-        return textOfPost;
-    }
-
-    public void setTextOfPost(String textOfPost) {
-        this.textOfPost = textOfPost;
-    }
-
-    public LocalDate getPostedAt() {
-        return postedAt;
-    }
-
-    public void setPostedAt(LocalDate postedAt) {
-        this.postedAt = postedAt;
-    }
 }

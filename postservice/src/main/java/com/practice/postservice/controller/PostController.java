@@ -2,25 +2,18 @@ package com.practice.postservice.controller;
 
 import com.practice.postservice.model.Post;
 import com.practice.postservice.service.PostService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @RestController
 public class PostController {
 
     private final PostService postService;
-
-    public PostController(PostService postRepository) {
-        this.postService = postRepository;
-    }
-
-    @GetMapping("/greeting")
-    public ResponseEntity<String> greeting() {
-        return ResponseEntity.ok("Hello, k8s!");
-    }
 
     @GetMapping("/posts/{id}")
     public ResponseEntity<Post> getPostById(@PathVariable Long id) {
