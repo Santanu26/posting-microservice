@@ -15,17 +15,17 @@ spec:
     spec:
       containers:
         - name: user-api
-          image: santanubarua/user-service:latest
+          image: santanubarua/user-service:1.0.0
           ports:
             - containerPort: 8080
           env:
-            - name: DB_HOST
-              value: user-db
-            - name: DB_PORT
-              value: "3306"
-            - name: DB_USERNAME
+            - name: MYSQL_HOST
+              value: user_db
+            - name: MYSQL_PORT
+              value: "3307"
+            - name: MYSQL_USER
               value: root
-            - name: DB_PASSWORD
+            - name: MYSQL_PASSWORD
               value: qwerty
   volumeClaimTemplates:
     - metadata:

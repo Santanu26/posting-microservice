@@ -12,11 +12,12 @@ services:
       - ./init-user-db.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3307:3306"
+
   user-service:
     image: ${REGISTRY_USERNAME}/user-service:${SERVICE_VERSION}
     environment:
       MYSQL_HOST: user_db
-      MYSQL_PORT: 3306
+      MYSQL_PORT: 3307
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     depends_on:
@@ -40,14 +41,19 @@ services:
     image: ${REGISTRY_USERNAME}/post-service:${SERVICE_VERSION}
     environment:
       MYSQL_HOST: post_db
-      MYSQL_PORT: 3306
+      MYSQL_PORT: 3308
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       USER_SERVICE_URL: http://user-service:8080
+      SERVICE_USER_HOSTNAME: user-service
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 15s
+        max_attempts: 3
+        window: 120s
     depends_on:
       - post_db
       - user-service
     ports:
       - "8081:8081"
-
-

@@ -19,13 +19,13 @@ spec:
           ports:
             - containerPort: 8081
           env:
-            - name: DB_HOST
+            - name: post_db
               value: post-db
-            - name: DB_PORT
-              value: "3306"
-            - name: DB_USERNAME
+            - name: MYSQL_PORT
+              value: "3308"
+            - name: MYSQL_USER
               value: root
-            - name: DB_PASSWORD
+            - name: MYSQL_PASSWORD
               value: qwerty
             - name: USER_SERVICE_URL
               value: "http://user-service:8080"

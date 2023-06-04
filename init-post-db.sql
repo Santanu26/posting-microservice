@@ -1,5 +1,4 @@
 
-
 create database if not exists post_db;
 use post_db;
 CREATE TABLE IF NOT EXISTS post (
@@ -10,6 +9,3 @@ CREATE TABLE IF NOT EXISTS post (
 );
 insert into post(author_id, text_of_post, posted_at)
 values (1,'Hi this post service', '2023-04-25');
-
-
-
