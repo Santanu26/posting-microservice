@@ -1,0 +1,38 @@
+version: '3'
+services:
+  user-db:
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=qwerty
+      - MYSQL_DATABASE=user_db
+  post-db:
+    image: mysql:latest
+    ports:
+      - 3308:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=qwerty
+      - MYSQL_DATABASE=post_db
+  user-service:
+    image: santanubarua/user-service:2.0.0
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://user-db:3306/user_db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=qwerty
+    depends_on:
+      - user-db
+  post-service:
+    image: santanubarua/post-service:2.0.0
+    ports:
+      - 8081:8081
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://post-db:3306/post_db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=qwerty
+    depends_on:
+      - user-service
+      - post-db
+

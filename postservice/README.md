@@ -16,5 +16,5 @@ In the project root directory, run the following command to build a Docker image
    `docker network create post-network`
 
 2. Run the following command to run the post-service container:
-   `docker run -p 9091:8081 --name post-service --net post-network -e MYSQL_HOST=mysqldb -e MYSQL_USER=root -e MYSQL_PASSWORD=qwerty -e MYSQL_PORT=3306 post-service`
-3. Test the service by sending a GET request to http://localhost:9091/greeting:
+   `docker run -p 8081:8081 --name post-service --net post-network -e MYSQL_HOST=mysqldb -e MYSQL_USER=root -e MYSQL_PASSWORD=qwerty -e MYSQL_PORT=3306 post-service`
+3. Test the service by sending a GET request to http://localhost:8081/greeting:
