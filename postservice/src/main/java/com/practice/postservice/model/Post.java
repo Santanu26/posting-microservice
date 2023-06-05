@@ -18,4 +18,5 @@ public class Post {
     private String textOfPost;
     @Column(nullable = false)
     private LocalDate postedAt;
+    private String topic;
 }

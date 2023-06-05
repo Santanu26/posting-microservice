@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: user-db
+  name: user-db-stateful
   namespace: k8s-program
 spec:
   selector:
@@ -22,17 +22,35 @@ spec:
               value: user_db
             - name: MYSQL_USER
               value: root
+              valueFrom:
+                secretKeyRef:
+                  name: user-db-credential
+                  key: username
             - name: MYSQL_PASSWORD
-              value: qwerty
+              value: password
+              valueFrom:
+                secretKeyRef:
+                  name: user-db-credential
+                  key: password
           ports:
             - containerPort: 3306
           volumeMounts:
             - name: user-db-pvc
               mountPath: /var/lib/mysql
+            - name: initdb-script
+              mountPath: /docker-entrypoint-initdb.d
+  volumes:
+    - name: user-db-data
+      persistentVolumeClaim:
+        claimName: user-db-data
+    - name: initdb-script
+      configMap:
+        name: user-db-init
   volumeClaimTemplates:
     - metadata:
         name: user-db-pvc
       spec:
+        storageClassName: hostpath
         accessModes:
           - ReadWriteOnce
         resources:

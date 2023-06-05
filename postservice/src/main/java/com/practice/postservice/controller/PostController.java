@@ -39,6 +39,7 @@ public class PostController {
         modifiedPost.setTextOfPost(updatedPost.getTextOfPost());
         modifiedPost.setPostedAt(updatedPost.getPostedAt());
         modifiedPost.setAuthorId(updatedPost.getAuthorId());
+        modifiedPost.setTopic(updatedPost.getTopic());
         return ResponseEntity.ok(postService.save(modifiedPost)); // return 200 if post is updated successfully
     }
 

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: user-deployment
-  namespace: ${DEFAULT_NAMESPACE}
+  namespace: k8s-program
 spec:
   replicas: 2
   selector:
@@ -16,17 +16,37 @@ spec:
       containers:
         - name: user-service
           image: ${REGISTER_USERNAME}/user-service:2.0.0
+          imagePullPolicy: always
           ports:
             - containerPort: 8080
           env:
-            - name: MYSQL_HOST
-              value: user_db
-            - name: MYSQL_PORT
-              value: "3306"
-            - name: MYSQL_USER
-              value: root
-            - name: MYSQL_PASSWORD
-              value: qwerty
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: user-db-credential
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: user-db-credential
+                  key: password
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: user-config-map
+                  key: SPRING_DATASOURCE_URL
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 15
   volumeClaimTemplates:
     - metadata:
         name: user-pvc

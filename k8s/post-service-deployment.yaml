@@ -8,6 +8,11 @@ spec:
   selector:
     matchLabels:
       app: post-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   template:
     metadata:
       labels:
@@ -16,15 +21,39 @@ spec:
       containers:
         - name: post-service
           image: ${REGISTER_USERNAME}/post-service:2.0.0
+          imagePullPolicy: Always
           ports:
             - containerPort: 8081
           env:
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://post-db:3306/post_db
+              valueFrom:
+                configMapKeyRef:
+                  name: post-config-mao
+                  key: SPRING_DATASOURCE_URL
             - name: SPRING_DATASOURCE_USERNAME
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  name: post-db-credential
+                  key: username
             - name: SPRING_DATASOURCE_PASSWORD
-              value: qwerty
+              valueFrom:
+                secretKeyRef:
+                  name: post-db-credential
+                  key: password
+            - name: SERVICE_USER_URL
+              value: "http://user-service:8080"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8081
+            initialDelaySeconds: 60
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8081
+            initialDelaySeconds: 60
+            periodSeconds: 15
           dependsOn:
             - user-service-service
             - post-db-service

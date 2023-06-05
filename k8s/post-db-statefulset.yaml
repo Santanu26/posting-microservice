@@ -22,17 +22,35 @@ spec:
               value: post_db
             - name: MYSQL_USER
               value: root
+              valueFrom:
+                secretKeyRef:
+                  name: post-db-credential
+                  key: username
             - name: MYSQL_PASSWORD
               value: qwerty
+              valueFrom:
+                secretKeyRef:
+                  name: post-db-credential
+                  key: password
           ports:
             - containerPort: 3308
           volumeMounts:
             - name: post-db-pvc
               mountPath: /var/lib/mysql
+            - name: initdb-script
+              mountPath: /docker-entrypoint-initdb.d
+  volumes:
+    - name: post-db-data
+      persistentVolumeClaim:
+        claimName: post-db-data
+    - name: initdb-script
+      configMap:
+        name: post-db-pvc
   volumeClaimTemplates:
     - metadata:
         name: post-db-pvc
       spec:
+        storageClassName: hostpath
         accessModes:
           - ReadWriteOnce
         resources:
