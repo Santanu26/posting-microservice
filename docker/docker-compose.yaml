@@ -7,6 +7,8 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=qwerty
       - MYSQL_DATABASE=user_db
+    volumes:
+      - ./user-db-init:/docker-entrypoint-initdb.d
   post-db:
     image: mysql:latest
     ports:
@@ -14,6 +16,8 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=qwerty
       - MYSQL_DATABASE=post_db
+    volumes:
+      - ./post-db-init:/docker-entrypoint-initdb.d
   user-service:
     image: santanubarua/user-service:2.0.0
     ports:
@@ -35,4 +39,3 @@ services:
     depends_on:
       - user-service
       - post-db
-
