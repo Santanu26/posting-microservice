@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: user-service
-  namespace: k8s-program
+  name: user-service-service
+  namespace: ${DEFAULT_NAMESPACE}
 spec:
   type: NodePort
   selector:
-    app: user-api
+    app: user-service
   ports:
     - name: http
       port: 8080
       targetPort: 8080
-      nodePort: 30090
+      nodePort: 30003

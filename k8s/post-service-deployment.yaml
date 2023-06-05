@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-service-deployment
+  namespace: k8s-program
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: post-service
+  template:
+    metadata:
+      labels:
+        app: post-service
+    spec:
+      containers:
+        - name: post-service
+          image: ${REGISTER_USERNAME}/post-service:2.0.0
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://post-db:3306/post_db
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: qwerty
+          dependsOn:
+            - user-service-service
+            - post-db-service

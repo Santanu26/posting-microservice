@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-db-deployment
+  namespace: ${DEFAULT_NAMESPACE}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: post-db
+  template:
+    metadata:
+      labels:
+        app: post-db
+    spec:
+      containers:
+        - name: post-db
+          image: mysql:latest
+          ports:
+            - containerPort: 3308
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: qwerty
+            - name: MYSQL_DATABASE
+              value: post_db
+          volumeMounts:
+            - name: post-db-init
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: post-db-init
+          emptyDir: {}

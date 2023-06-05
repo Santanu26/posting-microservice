@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-db-deployment
+  namespace: ${DEFAULT_NAMESPACE}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-db
+  template:
+    metadata:
+      labels:
+        app: user-db
+    spec:
+      containers:
+        - name: user-db
+          image: mysql:latest
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: ${MYSQL_PASSWORD}
+            - name: MYSQL_DATABASE
+              value: user_db
+          volumeMounts:
+            - name: user-db-init
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: user-db-init
+          emptyDir: {}

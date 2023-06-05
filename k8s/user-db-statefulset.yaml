@@ -25,7 +25,7 @@ spec:
             - name: MYSQL_PASSWORD
               value: qwerty
           ports:
-            - containerPort: 3307
+            - containerPort: 3306
           volumeMounts:
             - name: user-db-pvc
               mountPath: /var/lib/mysql
