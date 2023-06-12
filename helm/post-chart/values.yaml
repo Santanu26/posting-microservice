@@ -1,0 +1,29 @@
+namespace: k8s-program
+
+k8sProgram:
+  userService:
+    replicaCount: 2
+    image: santanubarua/user-service
+    tag: 1.0.0
+    serviceType: NodePort
+    nodePort: 30070
+    pullPolicy: always
+
+  postService:
+    replicaCount: 2
+    image: santanubarua/post-service
+    tag: 2.0.0
+    serviceType: NodePort
+    nodePort: 30080
+    userServiceUrl: "http://user-service:8080"
+    pullPolicy: always
+
+db:
+  userdb:
+    image: mysql:latest
+    database: user_db
+    url: "jdbc:mysql://userdb:3306/user_db"
+  postdb:
+    image: mysql:latest
+    database: post_db
+    url: "jdbc:mysql://postdb:3306/post_db"

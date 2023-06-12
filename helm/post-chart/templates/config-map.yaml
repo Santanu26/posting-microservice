@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-config-map
+  namespace: {{ .Values.namespace }}
+  {{ include "post-chart.labels" . | indent 2 }}
+data:
+  SPRING_DATASOURCE_URL: "{{ .Values.db.userdb.url }}"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-db-init
+  namespace: {{ .Values.namespace }}
+  {{ include "post-chart.labels" . | indent 2 }}
+data:
+  create-tables.sql: |
+    create database if not exists user_db;
+    use user_db;
+    create table if not exists user (
+        id bigint primary key auto_increment,
+        username varchar(255) not null,
+        amount varchar(255) not null,
+        amount_of_posts varchar(255) not null
+        );
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: post-config-map
+  namespace: {{ .Values.namespace }}
+  {{ include "post-chart.labels" . | indent 2 }}
+data:
+  SPRING_DATASOURCE_URL: "{{ .Values.db.postdb.url }}"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: post-db-init
+  namespace: {{ .Values.namespace }}
+  {{ include "post-chart.labels" . | indent 2 }}
+data:
+  create-tables.sql: |
+    create database if not exists post_db;
+    use post_db;
+    CREATE TABLE IF NOT EXISTS post (
+            id BIGINT PRIMARY KEY AUTO_INCREMENT,
+            author_id BIGINT NOT NULL,
+            text_of_post VARCHAR(255) NOT NULL,
+            posted_at DATE NOT NULL
+        );
