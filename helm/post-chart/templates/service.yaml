@@ -31,14 +31,13 @@ metadata:
   name: user-service-service
   namespace: {{ .Values.namespace }}
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: user-service
   ports:
     - name: http
       port: 8080
       targetPort: 8080
-      nodePort: {{ .Values.k8sProgram.userService.nodePort }}
 
 ---
 apiVersion: v1
@@ -47,11 +46,10 @@ metadata:
   name: post-service-service
   namespace: {{ .Values.namespace }}
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: post-api
   ports:
     - name: http
       port: 8081
       targetPort: 8081
-      nodePort: {{ .Values.k8sProgram.postService.nodePort }}
